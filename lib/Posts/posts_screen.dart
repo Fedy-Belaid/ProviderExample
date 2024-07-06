@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_provider/Posts/post_model.dart';
 import 'package:flutter_provider/Posts/post_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -37,7 +36,7 @@ class _PostsScreenState extends State<PostsScreen> {
 
   Widget buildInitialShimmer() {
     return ListView.builder(
-      itemCount: 10, // Show 10 shimmer items for initial load
+      itemCount: 10,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -83,7 +82,7 @@ class _PostsScreenState extends State<PostsScreen> {
       body: Consumer<PostProvider>(
         builder: (context, postProvider, child) {
           if (postProvider.isLoadingInitial && postProvider.posts.isEmpty) {
-            return buildInitialShimmer(); //
+            return buildInitialShimmer();
           }
 
           return Padding(
