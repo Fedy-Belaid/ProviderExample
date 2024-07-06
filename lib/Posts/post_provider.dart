@@ -3,31 +3,46 @@ import 'package:flutter_provider/Posts/post_model.dart';
 import 'post_service.dart';
 
 class PostProvider with ChangeNotifier {
-  List<Post> _posts = [];
-  bool _isLoading = false;
-  bool _isFetched = false;
+  final List<Post> _posts = [];
+  bool _isLoadingInitial = false;
+  bool _isLoadingMore = false;
+  bool _hasMorePosts = true;
+  int _currentPage = 0;
+  final int _limit = 10;
 
   List<Post> get posts => _posts;
-  bool get isLoading => _isLoading;
+  bool get isLoadingInitial => _isLoadingInitial;
+  bool get isLoadingMore => _isLoadingMore;
 
   final PostService _postService = PostService();
 
   Future<void> getPosts() async {
-    if (_isFetched) return;
+    if (_isLoadingInitial || _isLoadingMore || !_hasMorePosts) return;
 
-    _isLoading = true;
+    if (_posts.isEmpty) {
+      _isLoadingInitial = true;
+    } else {
+      _isLoadingMore = true;
+    }
     notifyListeners();
 
     try {
-      _posts = await _postService.fetchPosts();
-      _isFetched = true;
+      List<Post> newPosts =
+          await _postService.getPosts(_currentPage * _limit, _limit);
+      if (newPosts.isEmpty) {
+        _hasMorePosts = false;
+      } else {
+        _posts.addAll(newPosts);
+        _currentPage++;
+      }
     } catch (error) {
       if (kDebugMode) {
-        print("Couldn't get posts in provider");
+        print(error);
       }
     }
 
-    _isLoading = false;
+    _isLoadingInitial = false;
+    _isLoadingMore = false;
     notifyListeners();
   }
 }

@@ -1,22 +1,25 @@
 class Post {
   final int id;
-  final int userId;
+  final int albumId;
   final String title;
-  final String body;
+  final String url;
+  final String thumbnailUrl;
 
   Post({
     required this.id,
-    required this.userId,
+    required this.albumId,
     required this.title,
-    required this.body,
+    required this.url,
+    required this.thumbnailUrl,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
-      userId: json['userId'],
+      albumId: json['albumId'],
       title: json['title'],
-      body: json['body'],
+      url: json['url'],
+      thumbnailUrl: json['thumbnailUrl'],
     );
   }
 }
