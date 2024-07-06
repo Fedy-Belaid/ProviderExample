@@ -12,9 +12,6 @@ class PostsScreen extends StatefulWidget {
 }
 
 class _PostsScreenState extends State<PostsScreen> {
-  List<Post> posts = [];
-  bool isLoading = false;
-
   @override
   void initState() {
     super.initState();
